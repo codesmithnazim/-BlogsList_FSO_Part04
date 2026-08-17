@@ -10,5 +10,4 @@ app.use(requestLogger)
 app.use('/api/blogs', blogRouter)
 app.use(unknownEndpoints)
 app.use(errorHandler)
-
 export { app };
