@@ -1,0 +1,29 @@
+GET http://localhost:3000/api/blogs
+
+
+###
+GET http://localhost:3000/api/blogs/67c2ee98bfd7e820dd7cd659
+
+
+###
+POST http://localhost:3000/api/blogs
+Content-Type: application/json
+
+{
+  "title": "I think still we are fine, Shkar Alhamdullilah's",
+  "author": "Kamran Toofel"
+}
+
+
+###
+DELETE http://localhost:3000/api/blogs/67c2ee98bfd7e820dd7cd659
+
+
+###
+PUT http://localhost:3000/api/blogs/67cadab408282ee8ed1e61d0
+Content-Type: application/json
+
+{
+  "content": "HTML is easy",
+  "important": true
+}
