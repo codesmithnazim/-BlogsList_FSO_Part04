@@ -1,11 +1,14 @@
-import {test, describe} from "node:test"
-import assert from "node:assert"
-import list_Helper from "../utils/list_helper.js"
+import { test, describe } from "node:test";
+import assert from "node:assert";
+import list_Helper from "../utils/list_helper.js";
 
-test('dummy returns one', () => {
-  assert.strictEqual(list_Helper.dummy([]), 1, "the array length is not equal to 1")
-})
-
+test("dummy returns one", () => {
+  assert.strictEqual(
+    list_Helper.dummy([]),
+    1,
+    "the array length is not equal to 1",
+  );
+});
 
 const blogs = [
   {
@@ -14,23 +17,23 @@ const blogs = [
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
-    __v: 0
+    __v: 0,
   },
   {
     _id: "5a422aa71b54a676234d17f8",
     title: "Go To Statement Considered Harmful",
     author: "Edsger W. Dijkstra",
     url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 25,
-    __v: 0
+    likes: 6,
+    __v: 0,
   },
   {
     _id: "5a422b3a1b54a676234d17f9",
     title: "Canonical string reduction",
     author: "Edsger W. Dijkstra",
     url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-    __v: 0
+    likes: 17,
+    __v: 0,
   },
   {
     _id: "5a422b891b54a676234d17fa",
@@ -38,7 +41,7 @@ const blogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
     likes: 10,
-    __v: 0
+    __v: 0,
   },
   {
     _id: "5a422ba71b54a676234d17fb",
@@ -46,7 +49,7 @@ const blogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
-    __v: 0
+    __v: 0,
   },
   {
     _id: "5a422bc61b54a676234d17fc",
@@ -54,23 +57,42 @@ const blogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
-    __v: 0
-  }  
-]
+    __v: 0,
+  },
+];
 
+describe("Total likes Test", () => {
+  test("totalLikes counter", () => {
+    assert.strictEqual(list_Helper.totalLikes(blogs), 25);
+  });
+});
 
+describe("Favorite blog", () => {
+  test("Test the max likes blog", () => {
+    assert.strictEqual(
+      list_Helper.favoriteBlog(blogs),
+      12,
+      "The favoriteBlog have different likes than our expectation",
+    );
+  });
+});
 
-describe('Total likes Test',()=>{
-  test('totalLikes counter',()=>{
-    assert.strictEqual(list_Helper.totalLikes(blogs), 25)
-  })
-})
+describe("author with max blogs", () => {
+  test("should be Martin", () => {
+    assert.strictEqual(
+      JSON.stringify(list_Helper.mostBlogs(blogs)),
+      JSON.stringify({ author: "Robert C. Martin", blogs: 3 }),
+      "Robert C. Martin is not the one that wrote most blogs",
+    );
+  });
+});
 
-
-describe('Favorite blog', () => {
-  test('Test the max likes blog', () => {
-    assert.strictEqual(list_Helper.favoriteBlog(blogs), 12,"The favoriteBlog have different likes than our expectation")
-  })
-  
-  
-})
+describe("Favourite blogger", () => {
+  test("should be Martin", () => {
+    assert.strictEqual(
+       JSON.stringify(list_Helper.favoriteBlogger(blogs)),
+      JSON.stringify({ author: "Edsger W. Dijkstra", likes: 23 }),
+      "Favrite blogger is not Robert C. Martin",
+    );
+  });
+});
