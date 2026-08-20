@@ -1,9 +1,11 @@
 import config from "./utils/config.js";
 import { app } from "./app.js";
 import mongoose from "mongoose";
+import logger from "./utils/logger.js";
+logger.info(process.env.NODE_ENV)
 
 mongoose
-  .connect(config.mongoUrl, { family: 4 })
+  .connect(config.MONGODB_URI, { family: 4 })
   .then(console.log('MongoDB is connected ✔✔✔'))
   .catch((error) => console.log("error while connecting to mongoDB", error));
 
