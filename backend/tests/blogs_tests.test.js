@@ -35,31 +35,55 @@ describe("Tests done on the blogs list", () => {
     assert.strictEqual(Object.hasOwn(presentNotes.body[1], "id"), true);
   });
 
+  test("Default likes should be 0", async () => {
+    const BlogPost = {
+      title: "React reconcilliationmechanism is a worth knowing phenomenon",
+      author: "Mr. Nazim Ud Din",
+      url: "https://dev.to/codesmithnazim/reamain-part-of-previous-post-reconciliation-in-reactjs-4n02",
+    };
+    const newBlogPost = await api
+      .post("/api/blogs")
+      .send(BlogPost)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+    console.log("Te sample blog post = ", newBlogPost.body);
+    assert.strictEqual(
+      newBlogPost.body.likes === 0,
+      true,
+      "Default likes of blog post are not equal to 0",
+    );
+  });
 
-  test('Default likes should be 0',async () => {
-    const BlogPost={
-        "title":"React reconcilliationmechanism is a worth knowing phenomenon",
-        "author":'Mr. Nazim Ud Din',
-        "url":"https://dev.to/codesmithnazim/reamain-part-of-previous-post-reconciliation-in-reactjs-4n02"
-    }    
-    const newBlogPost=await api.post('/api/blogs').send(BlogPost).expect(201).expect('Content-Type',/application\/json/)
-    console.log("Te sample blog post = ", newBlogPost.body)
-    assert.strictEqual(newBlogPost.body.likes===0 , true, 'Default likes of blog post are not equal to 0')
-  })
+  test("should not allow posting illegal blog post", async () => {
+    const BlogPost = {
+      author: "Jimmy Neesham",
+      title: "I'm a blog post about React Reconciliation",
+      likes: 12,
+    };
 
-  test('should not allow posting illegal blog post',async () => {
-    const BlogPost= {
-        author: "Jimmy Neesham",
-        title: 'I\'m a blog post about React Reconciliation',
-        likes: 12
-    }
-
-    const newBlogPost =await api.post('/api/blogs').send(BlogPost).expect(400).expect('Content-Type', /application\/json/)
+    const newBlogPost = await api
+      .post("/api/blogs")
+      .send(BlogPost)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
     // console.log("new blog post ", newBlogPost.status, newBlogPost.statusCode)
-    assert.strictEqual(newBlogPost.statusCode, 400)
+    assert.strictEqual(newBlogPost.statusCode, 400);
+  });
+});
+
+describe("Del, update query related tests", async () => {
+  test("Blog deletion test", async () => {
+    const storedBlogsAtStart = await testsHelper.totalBlogs();
+    await api.delete(`/api/blogs/${storedBlogsAtStart[2].id}`).expect(204);
+    const storedBlogsAtEnd = await testsHelper.totalBlogs();
+    assert.strictEqual(storedBlogsAtEnd.length, storedBlogsAtStart.length - 1);
+    assert.strictEqual(storedBlogsAtEnd.map(blog=> blog.title).includes(storedBlogsAtStart[2].title ), false )
+  });
+
+  test('Blog likes updation test', async ()=>{
+    const updateNote = await api.patch('/api/blogs/5a422aa71b54a676234d17f8').send({"likes":120}).expect(200).expect('Content-Type',/application\/json/)
+    assert.strictEqual(updateNote.body.likes===120, true)
   })
-  
-  
 });
 
 after(async () => {
