@@ -6,7 +6,7 @@ const blogRouter= express.Router()
 
 blogRouter.get("/", (request, response, next) => {
   Blog.find({}).then((blogs) => {
-    response.json(blogs);
+    response.status(200).json(blogs);
   }).catch(error=>{ next(error)})
 });
 

@@ -1,9 +1,9 @@
 const info = (...info) => {
-  console.log(...info);
+  if (process.env.NODE_ENV !== "TEST") console.log(...info);
 };
 
 const error = (...error) => {
-  console.error(...error);
+  if (process.env.NODE_ENV !== "TEST") console.error(...error);
 };
 
 export default { info, error };
