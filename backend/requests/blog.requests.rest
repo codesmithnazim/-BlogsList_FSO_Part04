@@ -10,8 +10,9 @@ POST http://localhost:3000/api/blogs
 Content-Type: application/json
 
 {
-  "title": "I think still we are fine, Shkar Alhamdullilah's",
-  "author": "Kamran Toofel"
+  "title": "jhkhkm  nm,njh",
+  "author": "jhkjhjhjkhhjhkjh",
+  "url":"hjkhkjhkkljjhkjhjkhkhkjkhkjh"
 }
 
 

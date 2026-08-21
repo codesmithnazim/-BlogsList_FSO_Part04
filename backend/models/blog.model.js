@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true },
-  author: { typr: String },
+  author: { type: String },
   url: { type: String, required: true, unique: true },
-  likes: Number,
+  likes:{type: Number, default: 0},
 });
 
 // blogSchema.set("toJSON", {
@@ -17,8 +17,8 @@ const blogSchema = mongoose.Schema({
 
 blogSchema.set("toJSON", {
   transform: (originalDoc, returnedDoc) => {
-    returnedDoc.id = originalDoc._id.toString();
-    (delete returnedDoc._id, delete returnedDoc.__V);
+    returnedDoc.id = returnedDoc._id.toString();
+    (delete returnedDoc._id, delete returnedDoc.__v);
   },
 });
 
