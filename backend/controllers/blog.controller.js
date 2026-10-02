@@ -1,6 +1,5 @@
 import express from "express";
 import Blog from "../models/blog.model.js";
-// import logger from "../utils/logger.js";
 const blogRouter = express.Router();
 
 blogRouter.get("/", async (request, response, next) => {
@@ -28,24 +27,26 @@ blogRouter.delete("/:id", async (request, response, next) => {
   const { id } = request.params;
   // const { body } = request;
   try {
-    
     await Blog.findByIdAndDelete(id);
-    response.status(204).end()
+    response.status(204).end();
   } catch (error) {
     next(error);
   }
 });
 
-blogRouter.patch('/:id', async (request, response, next )=>{
-  const {id}= request.params;
-  const {body}= request;
-  try{
- const updatedBlog=   await Blog.findByIdAndUpdate(id, {likes: body.likes}, {new:true , runvalidators: true, context: 'query'})
- response.status(200).json(updatedBlog)
-  }catch(error){
-    next(error)
+blogRouter.patch("/:id", async (request, response, next) => {
+  const { id } = request.params;
+  const { body } = request;
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      { likes: body.likes },
+      { new: true, runvalidators: true, context: "query" },
+    );
+    response.status(200).json(updatedBlog);
+  } catch (error) {
+    next(error);
   }
-})
-
+});
 
 export default blogRouter;
