@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
     required: true,
     // minlength: 6,
   },
+  blogs: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Blog"
+  }
 });
 
 userSchema.set("toJSON", {

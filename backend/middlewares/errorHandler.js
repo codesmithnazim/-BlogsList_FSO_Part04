@@ -11,7 +11,7 @@ const errorHandler = (error, req, res, next) => {
   else if (error.name === "MongooseError")
     return res.status(400).json({error: error.message})
   else if (error.name === "JsonWebTokenError")
-    return res.status(401).json({ error: "Invalid token " });
+    return res.status(401).json({ error: "Invalid token, Not authorized" });
   else if (error.name === "TokenExpiredError")
     return res.status(401).json({ error: error.message });
   next(error)

@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
+import config from "../utils/config.js";
 import logger from "../utils/logger.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const getUser = async (req, res, next) => {
   try {
@@ -14,7 +16,7 @@ const getUser = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find();
+    const allUsers = await User.find().populate("blogs");
     res.status(200).json({ users: allUsers });
   } catch (error) {
     next(error);
@@ -31,6 +33,11 @@ const registerUser = async (req, res, next) => {
     details.password = await bcrypt.hash(details.password, 10);
     const storedDetails = await User.insertOne(details);
     logger.info("stored user details = ", storedDetails);
+    const token = jwt.sign(
+      { user: storedDetails.id, email: storedDetails.email },
+      config.jwt_secret,
+    );
+    console.log("The new user token = ", token);
     res.status(201).json({ user: storedDetails });
   } catch (error) {
     next(error);

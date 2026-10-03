@@ -101,6 +101,7 @@ function favoriteBlogger(blogs) {
 const totalBlogs = async () => {
   const blogsArrayLength= await Blog.find({})
   // console.log('blogsArrayLength ', blogsArrayLength)
+  console.log("total number of blogs stored = ", blogsArrayLength.length)
   return blogsArrayLength
 };
 

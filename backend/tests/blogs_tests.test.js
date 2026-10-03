@@ -8,11 +8,11 @@ import testsHelper from "./testsHelper.js";
 
 const api = supertest(app);
 
-beforeEach(async () => {
-  await Blog.deleteMany();
-  //    console.log('all the notes we get from the databse ',allBlogs )
-  await Promise.all(testsHelper.blogs.map((blog) => Blog.create(blog)));
-});
+// beforeEach(async () => {
+//   await Blog.deleteMany();
+//   //    console.log('all the notes we get from the databse ',allBlogs )
+//   await Promise.all(testsHelper.blogs.map((blog) => Blog.create(blog)));
+// });
 
 describe("Tests done on the blogs list", () => {
   test("testing the total number of blogs posts returned", async () => {
@@ -69,6 +69,22 @@ describe("Tests done on the blogs list", () => {
     // console.log("new blog post ", newBlogPost.status, newBlogPost.statusCode)
     assert.strictEqual(newBlogPost.statusCode, 400);
   });
+
+  test("prevent blogs posting by unauthorized users", async () => {
+    const BlogPost = {
+      author: "Jimmy Neesham",
+      title: "I'm a blog post about React Reconciliation",
+      likes: 12,
+    };
+
+    const newBlogPost = await api
+      .post("/api/blogs")
+      .send(BlogPost)
+      .expect(401)
+      .expect("Content-Type", /application\/json/);
+    // console.log("new blog post ", newBlogPost.status, newBlogPost.statusCode)
+    assert.strictEqual(newBlogPost.statusCode, 401);
+  });
 });
 
 describe("Del, update query related tests", async () => {
@@ -77,13 +93,22 @@ describe("Del, update query related tests", async () => {
     await api.delete(`/api/blogs/${storedBlogsAtStart[2].id}`).expect(204);
     const storedBlogsAtEnd = await testsHelper.totalBlogs();
     assert.strictEqual(storedBlogsAtEnd.length, storedBlogsAtStart.length - 1);
-    assert.strictEqual(storedBlogsAtEnd.map(blog=> blog.title).includes(storedBlogsAtStart[2].title ), false )
+    assert.strictEqual(
+      storedBlogsAtEnd
+        .map((blog) => blog.title)
+        .includes(storedBlogsAtStart[2].title),
+      false,
+    );
   });
 
-  test('Blog likes updation test', async ()=>{
-    const updateNote = await api.patch('/api/blogs/5a422aa71b54a676234d17f8').send({"likes":120}).expect(200).expect('Content-Type',/application\/json/)
-    assert.strictEqual(updateNote.body.likes===120, true)
-  })
+  test("Blog likes updation test", async () => {
+    const updateNote = await api
+      .patch("/api/blogs/5a422aa71b54a676234d17f8")
+      .send({ likes: 120 })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+    assert.strictEqual(updateNote.body.likes === 120, true);
+  });
 });
 
 after(async () => {
